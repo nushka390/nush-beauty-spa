@@ -13,10 +13,9 @@ export const UsersTable = pgTable("users", {
   phoneNumber: varchar("PhoneNumber", { length: 20 }),
   address: varchar("Address", { length: 255 }),
   role: varchar("Role", { length: 20 }).default("customer"), // admin | staff | customer
-  
-  password: varchar("Password", { length: 255 }).notNull(), // 🔑 NEW: hashed password
-  isVerified: boolean("IsVerified").default(false).notNull(), // NEW
-  verificationCode: varchar("VerificationCode", { length: 255 }) // NEW
+  password: varchar("Password", { length: 255 }).notNull(), // 🔑 ADD THIS LINE
+  isVerified: boolean("IsVerified").default(false).notNull(), // Optional
+  verificationCode: varchar("VerificationCode", { length: 255 }) // Optional
 });
 
 
