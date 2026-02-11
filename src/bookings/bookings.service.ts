@@ -34,7 +34,7 @@ export const getBookingByIdService = async (id: number) => {
       .select()
       .from(BookingsTable)
       .where(eq(BookingsTable.bookingID, id));
-    return result[0]; // return single booking or undefined
+    return result[0]; 
   } catch (error) {
     throw new Error(`Failed to fetch booking by ID: ${error}`);
   }

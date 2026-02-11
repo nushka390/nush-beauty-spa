@@ -12,8 +12,9 @@ const router = Router();
 // POST /api/users/register
 router.post("/register", createusersController);
 
+
 // GET /api/users
-router.get("/", createusersController);
+router.get("/", getusersController);
 
 // GET /api/users/:id
 router.get("/:id", getusersByIdController);

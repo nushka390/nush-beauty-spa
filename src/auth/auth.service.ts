@@ -3,6 +3,7 @@ import { sql, eq } from "drizzle-orm";
 import { UsersTable } from "../Drizzle/schema";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../mailer/mailer";
 
 // Define user type
 export type User = typeof UsersTable.$inferInsert;
@@ -15,7 +16,8 @@ export const registerUserService = async (
   data: Omit<User, "userID" | "isVerified" | "verificationCode">
 ) => {
   const hashedPassword = await bcrypt.hash(data.password as string, 10);
-  const verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
+  const verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); 
+try {
 
   await db.insert(UsersTable).values({
     ...data,
@@ -23,12 +25,22 @@ export const registerUserService = async (
     isVerified: false,
     verificationCode,
   });
+  await sendEmail(
+    data.email,
+    "Verify Your Account",
+    `Your verification code is: ${verificationCode}`,
+    `Your verification code is: ${verificationCode}`,
+
+  );
 
   return {
     message: "User registered successfully. Please verify your account.",
     verificationCode, // ⚠️ In production send via email/SMS
   };
-};
+} catch (error) {
+  console.error("Error in registerUserService:", error);
+  throw new Error("Failed to register user");
+}};
 
 // Get user by email
 export const getUserByEmailService = async (email: string) => {

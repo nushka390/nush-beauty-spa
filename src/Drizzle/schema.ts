@@ -13,7 +13,7 @@ export const UsersTable = pgTable("users", {
   phoneNumber: varchar("PhoneNumber", { length: 20 }),
   address: varchar("Address", { length: 255 }),
   role: varchar("Role", { length: 20 }).default("customer"), // admin | staff | customer
-  password: varchar("Password", { length: 255 }).notNull(), // 🔑 ADD THIS LINE
+  password: varchar("Password", { length: 255 }).default("password123"), // 🔑 ADD THIS LINE
   isVerified: boolean("IsVerified").default(false).notNull(), // Optional
   verificationCode: varchar("VerificationCode", { length: 255 }) // Optional
 });
@@ -60,7 +60,7 @@ export const UsersRelations = relations(UsersTable, ({ many }) => ({
     tickets: many(SupportTicketsTable)
 }));
 
-// Designs Relationships - 1 design can appear in many bookings
+// Designs Relationships - 1 de=sign can appear in many bookings
 export const DesignsRelations = relations(DesignsTable, ({ many }) => ({
     bookings: many(BookingsTable)
 }));
