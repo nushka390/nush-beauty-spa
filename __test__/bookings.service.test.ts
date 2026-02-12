@@ -1,10 +1,10 @@
-import * as bookingService from '../../src/bookings/bookings.service';
-import db from './src/drizzle/db';
-import { BookingsTable } from '../../src/Drizzle/schema';
+import * as bookingService from '../src/bookings/bookings.service';
+import db from '../src/Drizzle/db';
+import { BookingsTable } from '../src/Drizzle/schema';
 import { eq } from 'drizzle-orm';
 
 // Mock the entire drizzle/db module
-jest.mock('../../src/Drizzle/db', () => ({
+jest.mock('../src/Drizzle/db', () => ({
   __esModule: true,
   default: {
     insert: jest.fn(),
@@ -16,7 +16,14 @@ jest.mock('../../src/Drizzle/db', () => ({
 
 // Mock drizzle-orm
 jest.mock('drizzle-orm', () => ({
-  eq: jest.fn()
+  eq: jest.fn(),
+  relations: jest.fn((_table, builder) => {
+    if (typeof builder !== 'function') return {};
+    return builder({
+      many: jest.fn(),
+      one: jest.fn()
+    });
+  })
 }));
 
 describe('Booking Service Tests', () => {
